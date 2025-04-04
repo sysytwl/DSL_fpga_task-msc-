@@ -1,0 +1,108 @@
+;7deg reset
+movb 0x0F
+sbb 0x05
+sbb 0x06
+sbb 0xD0
+sbb 0xD1
+sbb 0x00;vga text reset
+sbb 0x01
+
+
+
+;text display hello world
+movb 0x10
+opb DEC_B
+sbb 0x02
+#print:
+movb 0x01
+sbb 0xB1
+opb INC_B
+sbb 0x01
+movb 0x02
+opb INC_B
+sbb 0x02
+lbb
+sbb 0xB2
+mova 0x02
+movb 0x11
+blt #print
+
+
+
+;ps2 module start trans
+movb 0x20
+sbb 0xA1
+
+
+
+;irs rising edge for mouse
+movb 0x0F
+opb INC_B
+;opb INC_B
+sbb 0x80
+
+
+
+irs: ;interrupts
+mova 0x82; irs flag
+sba 0x82
+movb 0x0F;0
+sbb 0x82;interrupts reset
+
+;mouse data
+mova 0x21
+opa INC_A
+sba 0x21
+movb 0x22
+bgt #case2
+movb 0x00 ;case 1
+sbb 0xB0
+movb 0x01
+sbb 0xB1
+movb 0xA2
+sbb 0xB2
+jal #breakcase
+
+#case2:
+movb 0x23
+beq #case3
+movb 0x08
+sbb 0xB0
+movb 0x09
+sbb 0xB1
+movb 0xA2
+sbb 0xB2
+jal #breakcase
+
+#case3:
+movb 0x24
+beq #casedefault
+movb 0x08
+sbb 0xB0
+movb 0x0B
+sbb 0xB1
+movb 0xA2
+sbb 0xB2
+;jal #breakcase
+#casedefault:
+mova 0x22
+opa DEC_A
+sba 0x21
+#breakcase:
+
+;7seg counter
+movb 0x06
+mova 0x06
+sbb 0xD1
+opb INC_B
+sbb 0x06
+bgt #segoverflow
+
+ret;out of irs
+
+#segoverflow:
+mova 0x05
+opa INC_A
+sba 0xD0
+sba 0x05
+ret
