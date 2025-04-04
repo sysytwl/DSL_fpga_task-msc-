@@ -1,5 +1,7 @@
 # microprocessor-rc
-
+## MSc Digital System Lab (also check https://github.com/thomson008/microprocessor-rc/tree/master)
+> Verilog project of a simple microprocessor with peripherals such as mouse, VGA display and IR transmitter. Can be run on Xilinx Basys 3 FPGA board with an additional IR module in order to control a RC car. The system was developed for Digital Systems Laboratory course at The University of Edinburgh.
+ 
 ### ip:
 1. block ram -> mcu ram
 2. block rom -> mcu rom
